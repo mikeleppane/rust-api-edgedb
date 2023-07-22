@@ -3,7 +3,11 @@
 ## Setup
 
 1. Make sure [Docker](https://www.docker.com/) is installed and running
-2. The default port for the backend api is 8080. You can change this from `docker-compose.yml` if needed
+2. Create a .env file if you want to change the defaults. This file will store environment variables. Specifically, PORT and EDGEDB_DSN. It should look like this: 
+   - PORT=8080 (default port used by the api server)
+   - EDGEDB_DSN=edgedb://edgedb@db:5656/edgedb?tls_security=insecure (default dsn(data source name) which is used to connect edgedb server from the backend service)
+
+3. The default port for the backend api is 8080. You can change this from `docker-compose.yml` if needed
 
 ## Run Locally using Docker
 1. Run API via Docker Compose:

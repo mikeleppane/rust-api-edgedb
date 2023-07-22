@@ -11,10 +11,11 @@ type Db = Arc<RwLock<Client>>;
 
 pub type UserResult<T> = Result<T, edgedb_tokio::Error>;
 
-pub const EDGEDB_DSN: &str = "edgedb://edgedb@db:5656/edgedb?tls_security=insecure";
+pub const DEFAULT_EDGEDB_DSN: &str = "edgedb://edgedb@db:5656/edgedb?tls_security=insecure";
 
 pub async fn initialize_db() -> Result<Db> {
-    let pool = Client::new(&Builder::new().dsn(EDGEDB_DSN)?.build_env().await?);
+    let dsn = std::env::var("EDGEDB_DSN").unwrap_or(DEFAULT_EDGEDB_DSN.to_string());
+    let pool = Client::new(&Builder::new().dsn(&dsn)?.build_env().await?);
     pool.ensure_connected().await?;
     Ok(Arc::new(RwLock::new(pool)))
 }
