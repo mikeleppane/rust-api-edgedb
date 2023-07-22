@@ -1,0 +1,25 @@
+GET http://localhost:8080/users
+
+###
+POST http://localhost:8080/user
+content-type: application/json
+
+# 
+{
+    "name": "name",
+    "email": "email"
+}
+
+###
+DELETE  http://localhost:8080/user
+content-type: application/json
+
+{
+    "name": "name",
+    "email": "email"
+}
+
+
+###
+GET  http://localhost:8080/health_check
+

@@ -1,0 +1,45 @@
+services:
+  backend:
+      container_name: 'rust-api'
+      build:
+        context: .
+        dockerfile: Dockerfile
+      environment:
+        - PORT=8080
+      ports:
+        - '$PORT:$PORT'
+      depends_on:
+        db:
+          condition: service_healthy
+      healthcheck:
+        test: curl --fail localhost:$PORT/health_check || exit 1
+        interval: 5s
+        retries: 5
+        start_period: 5s
+        timeout: 5s
+      restart: unless-stopped
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    environment:
+      EDGEDB_SERVER_SECURITY: insecure_dev_mode
+    volumes:
+      - "./dbschema:/dbschema"
+      - "edgedb-data:/var/lib/edgedb/data"
+    ports:
+      - "5655:5656"
+      - "10701:10700"
+    expose:
+      - 5655
+      - 10701
+    healthcheck:
+      test: curl --fail db:5656/server/status/alive || exit 1
+      interval: 5s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
+    restart: unless-stopped
+
+volumes:
+  edgedb-data:
