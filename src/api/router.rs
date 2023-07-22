@@ -1,5 +1,5 @@
 use axum::{
-    routing::{delete, get, post},
+    routing::{delete, get, post, put},
     Router,
 };
 use tower_http::trace::{self, TraceLayer};
@@ -10,15 +10,17 @@ use super::root::root_handler;
 use super::users::create_user;
 use super::users::delete_user;
 use super::users::get_users;
+use super::users::update_user;
 use crate::db;
 
 pub fn build_router(db: db::EdgeDBUserStore) -> Router {
     Router::new()
-        .route("/", get(root_handler))
-        .route("/health_check", get(health_check))
-        .route("/users", get(get_users))
-        .route("/user", post(create_user))
-        .route("/user", delete(delete_user))
+        .route("/v1", get(root_handler))
+        .route("/v1/health_check", get(health_check))
+        .route("/v1/users", get(get_users))
+        .route("/v1/user", post(create_user))
+        .route("/v1/user", put(update_user))
+        .route("/v1/user", delete(delete_user))
         .with_state(db)
         .layer(
             TraceLayer::new_for_http()

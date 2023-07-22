@@ -23,13 +23,13 @@
 
 ### Health check
 
-#### GET /health_check
+#### GET /v1/health_check
 
 Checks that the app is ok.
 
 ### Users
 
-#### GET /users
+#### GET /v1/users
 
 Example response payload:
 
@@ -42,7 +42,7 @@ Example response payload:
 ]
 ```
 
-#### POST /user
+#### POST /v1/user
 
 Example request payload:
 
@@ -54,13 +54,24 @@ Example request payload:
 
 ```
 
-#### DELETE /user
+#### DELETE /v1/user
 
 Example request payload:
 
 ```
 {
-    "name": "Graydon Hoare",
+    "email": "graydonhoare@mozilla.com
+}
+
+```
+
+#### PUT /v1/user
+
+Example request payload:
+
+```
+{
+    "name": "Graydon "Rust" Hoare"
     "email": "graydonhoare@mozilla.com
 }
 

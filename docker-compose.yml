@@ -24,6 +24,7 @@ services:
       dockerfile: Dockerfile.db
     environment:
       EDGEDB_SERVER_SECURITY: insecure_dev_mode
+      EDGEDB_SERVER_ADMIN_UI: enabled
     volumes:
       - "./dbschema:/dbschema"
       - "edgedb-data:/var/lib/edgedb/data"

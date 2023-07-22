@@ -56,9 +56,27 @@ impl EdgeDBUserStore {
             .query_required_single_json(query, &(user.name, user.email))
             .await
     }
-    pub async fn delete_user(&self, user: User) -> UserResult<Json> {
+    pub async fn update_user(&self, user: User) -> UserResult<Json> {
         let query = r#"
-        select (delete User filter .name = <str>$0 and .email = <str>$1) {
+        select (update User
+            filter
+                .email = <str>$1
+            set {
+                name := <str>$0
+            }) {
+            name,
+            email
+        } filter .email = <str>$1;
+        "#;
+        self.pool
+            .read()
+            .await
+            .query_required_single_json(query, &(user.name, user.email))
+            .await
+    }
+    pub async fn delete_user(&self, email: &str) -> UserResult<Json> {
+        let query = r#"
+        select (delete User filter .email = <str>$0) {
             name,
             email
         };
@@ -66,7 +84,7 @@ impl EdgeDBUserStore {
         self.pool
             .read()
             .await
-            .query_required_single_json(query, &(user.name, user.email))
+            .query_required_single_json(query, &(email,))
             .await
     }
 }
